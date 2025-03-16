@@ -62,7 +62,8 @@ Para ejecutar este proyecto, necesitas:
    ```bash
    git clone https://github.com/tu-usuario/clinica-dental.git
 
-🖥️ Menú Principal
+## 🖥️ Menú Principal
+
 El sistema ofrece un menú interactivo con las siguientes opciones:
 
 - Gestión de Pacientes:
