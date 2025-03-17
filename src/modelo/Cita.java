@@ -6,15 +6,17 @@ public class Cita {
     private String idCita;
     private Paciente paciente;
     private Doctor doctor;
-    private LocalDateTime fecha;
+    private LocalDateTime horaInicio;
+    private LocalDateTime horaFin;
     private String estado;
     private double costoCita;
 
-    public Cita(String idCita, Paciente paciente, Doctor doctor, LocalDateTime fecha, double costoCita) {
+    public Cita(String idCita, Paciente paciente, Doctor doctor, LocalDateTime horaInicio, LocalDateTime horaFin, double costoCita) {
         this.idCita = idCita;
         this.paciente = paciente;
         this.doctor = doctor;
-        this.fecha = fecha;
+        this.horaInicio = horaInicio;
+        this.horaFin = horaFin;
         this.costoCita = costoCita;
         this.estado = "Pendiente";
     }
@@ -29,8 +31,11 @@ public class Cita {
     public Doctor getDoctor() { return doctor; }
     public void setDoctor(Doctor doctor) { this.doctor = doctor; }
 
-    public LocalDateTime getFecha() { return fecha; }
-    public void setFecha(LocalDateTime fecha) { this.fecha = fecha; }
+    public LocalDateTime getHoraInicio() { return horaInicio; }
+    public void setHoraInicio(LocalDateTime horaInicio) { this.horaInicio = horaInicio; }
+
+    public LocalDateTime getHoraFin() { return horaFin; }
+    public void setHoraFin(LocalDateTime horaFin) { this.horaFin = horaFin; }
 
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }
@@ -38,25 +43,15 @@ public class Cita {
     public double getCostoCita() { return costoCita; }
     public void setCostoCita(double costoCita) { this.costoCita = costoCita; }
 
-    // Métodos adicionales
-    public void agregarCita() {
-        this.estado = "Cita agendada";
-        System.out.println("\n--- Cita Agendada ---");
-        System.out.println("ID de la cita: " + idCita);
-        System.out.println("Paciente: " + paciente.getNombre() + " " + paciente.getApellido());
-        System.out.println("Doctor: " + doctor.getNombre() + " " + doctor.getApellido());
-        System.out.println("Fecha y hora: " + fecha);
-        System.out.println("Costo: $" + costoCita);
-        System.out.println("Estado: " + estado);
-    }
-
+    // Método toString
     @Override
     public String toString() {
         return "Cita{" +
                 "idCita='" + idCita + '\'' +
                 ", paciente=" + paciente.getNombre() + " " + paciente.getApellido() +
                 ", doctor=" + doctor.getNombre() + " " + doctor.getApellido() +
-                ", fecha=" + fecha +
+                ", horaInicio=" + horaInicio +
+                ", horaFin=" + horaFin +
                 ", estado='" + estado + '\'' +
                 ", costoCita=" + costoCita +
                 '}';

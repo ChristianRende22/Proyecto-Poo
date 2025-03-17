@@ -10,11 +10,15 @@ public class ClinicaDental {
     private static List<Paciente> pacientes = new ArrayList<>();
     private static List<Doctor> doctores = new ArrayList<>();
     private static List<Cita> citas = new ArrayList<>();
-    private static List<Factura> facturas = new ArrayList<>();
     private static List<Tratamiento> tratamientos = new ArrayList<>();
+    private static List<Factura> facturas = new ArrayList<>();
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+        // Agregar datos hardcoded para pruebas
+        agregarDatosHardcoded();
+
+        // Menú principal
         while (true) {
             System.out.println("\n--- Sistema de Gestión de Clínica Dental ---");
             System.out.println("1. Gestión de Pacientes");
@@ -25,8 +29,15 @@ public class ClinicaDental {
             System.out.println("6. Salir");
             System.out.print("Seleccione una opción: ");
 
-            int opcion = scanner.nextInt();
-            scanner.nextLine(); // Consumir el salto de línea
+            int opcion = 0;
+            try {
+                opcion = scanner.nextInt();
+                scanner.nextLine(); // Consumir el salto de línea
+            } catch (Exception e) {
+                System.out.println("❌ Error: Ingrese un número válido.");
+                scanner.nextLine(); // Limpiar el buffer del scanner
+                continue;
+            }
 
             switch (opcion) {
                 case 1:
@@ -52,6 +63,33 @@ public class ClinicaDental {
                     System.out.println("❌ Opción no válida. Intente de nuevo.");
             }
         }
+    }
+
+    // Método para agregar datos hardcoded
+    private static void agregarDatosHardcoded() {
+        // Crear pacientes hardcoded
+        Paciente paciente1 = new Paciente("Juan", "Pérez", 30, "12345678-9", 12345678, "juan.perez@example.com");
+        pacientes.add(paciente1);
+
+        // Crear doctores hardcoded
+        Doctor doctor1 = new Doctor(1, "Carlos", "García", "Odontología", 87654321, "carlos.garcia@clinica.com");
+        doctores.add(doctor1);
+
+        // Crear citas hardcoded
+        LocalDateTime horaInicio = LocalDateTime.of(2025, 10, 25, 10, 0);
+        LocalDateTime horaFin = LocalDateTime.of(2025, 10, 25, 11, 0);
+        Cita cita1 = new Cita("C001", paciente1, doctor1, horaInicio, horaFin, 100.0);
+        citas.add(cita1);
+
+        // Crear tratamientos hardcoded
+        Tratamiento tratamiento1 = new Tratamiento("T001", paciente1, doctor1, "Limpieza dental", 150.0, LocalDateTime.now(), "Pendiente");
+        tratamientos.add(tratamiento1);
+
+        // Crear facturas hardcoded
+        Factura factura1 = new Factura("F001", paciente1, List.of(cita1), List.of(tratamiento1), LocalDateTime.now(), 250.0, "Pendiente");
+        facturas.add(factura1);
+
+        System.out.println("✅ Datos hardcoded agregados correctamente.");
     }
 
     // Métodos para la gestión de pacientes
@@ -214,31 +252,36 @@ public class ClinicaDental {
         System.out.print("Ingrese el correo del doctor: ");
         String correo = scanner.nextLine();
 
-        Doctor doctor = new Doctor(nombre, apellido, especialidad, telefono, correo);
+        int idDoctor = generarIdUnico();
+        Doctor doctor = new Doctor(idDoctor, nombre, apellido, especialidad, telefono, correo);
         doctores.add(doctor);
-        System.out.println("✅ Doctor registrado exitosamente.");
+        System.out.println("✅ Doctor registrado exitosamente con ID: " + idDoctor);
     }
 
     private static void consultarCitasDoctor() {
-        System.out.print("Ingrese el correo del doctor: ");
-        String correo = scanner.nextLine();
-        Doctor doctor = buscarDoctorPorCorreo(correo);
+        System.out.print("Ingrese el ID del doctor: ");
+        int idDoctor = Integer.parseInt(scanner.nextLine());
+        Doctor doctor = buscarDoctorPorId(idDoctor);
 
         if (doctor == null) {
             System.out.println("❌ Doctor no encontrado.");
             return;
         }
 
-        doctor.consultarCitas(citas);
+        doctor.consultarCitas();
     }
 
-    private static Doctor buscarDoctorPorCorreo(String correo) {
+    private static Doctor buscarDoctorPorId(int id) {
         for (Doctor doctor : doctores) {
-            if (doctor.getCorreo().equals(correo)) {
+            if (doctor.getId() == id) {
                 return doctor;
             }
         }
         return null;
+    }
+
+    private static int generarIdUnico() {
+        return doctores.size() + 1;
     }
 
     // Métodos para la gestión de citas
@@ -282,23 +325,40 @@ public class ClinicaDental {
             return;
         }
 
-        System.out.print("Ingrese el correo del doctor: ");
-        String correo = scanner.nextLine();
-        Doctor doctor = buscarDoctorPorCorreo(correo);
+        System.out.print("Ingrese el ID del doctor: ");
+        int idDoctor = Integer.parseInt(scanner.nextLine());
+        Doctor doctor = buscarDoctorPorId(idDoctor);
 
         if (doctor == null) {
             System.out.println("❌ Doctor no encontrado.");
             return;
         }
 
-        System.out.print("Ingrese la fecha y hora de la cita (yyyy-MM-dd HH:mm): ");
-        String fechaStr = scanner.nextLine();
-        LocalDateTime fecha;
+        System.out.print("Ingrese la fecha y hora de inicio de la cita (yyyy-MM-dd HH:mm): ");
+        String fechaInicioStr = scanner.nextLine();
+        LocalDateTime horaInicio;
 
         try {
-            fecha = LocalDateTime.parse(fechaStr.replace(" ", "T"));
+            horaInicio = LocalDateTime.parse(fechaInicioStr.replace(" ", "T"));
         } catch (Exception e) {
             System.out.println("❌ Error: Formato de fecha inválido. Use el formato yyyy-MM-dd HH:mm.");
+            return;
+        }
+
+        System.out.print("Ingrese la fecha y hora de fin de la cita (yyyy-MM-dd HH:mm): ");
+        String fechaFinStr = scanner.nextLine();
+        LocalDateTime horaFin;
+
+        try {
+            horaFin = LocalDateTime.parse(fechaFinStr.replace(" ", "T"));
+        } catch (Exception e) {
+            System.out.println("❌ Error: Formato de fecha inválido. Use el formato yyyy-MM-dd HH:mm.");
+            return;
+        }
+
+        // Verificar disponibilidad del doctor
+        if (!doctor.estaDisponible(horaInicio, horaFin)) {
+            System.out.println("❌ El doctor no está disponible en ese horario.");
             return;
         }
 
@@ -318,7 +378,7 @@ public class ClinicaDental {
         String idCita = "C" + (citas.size() + 1);
 
         // Crear la cita con el ID generado
-        Cita cita = new Cita(idCita, paciente, doctor, fecha, costo);
+        Cita cita = new Cita(idCita, paciente, doctor, horaInicio, horaFin, costo);
         citas.add(cita);
 
         // Agregar la cita al historial del paciente
@@ -333,12 +393,12 @@ public class ClinicaDental {
         Cita cita = buscarCitaPorId(idCita);
 
         if (cita == null) {
-            System.out.println("Cita no encontrada.");
+            System.out.println("❌ Cita no encontrada.");
             return;
         }
 
         cita.setEstado("Cancelada");
-        System.out.println("Cita cancelada exitosamente.");
+        System.out.println("✅ Cita cancelada exitosamente.");
     }
 
     private static void modificarCita() {
@@ -347,23 +407,41 @@ public class ClinicaDental {
         Cita cita = buscarCitaPorId(idCita);
 
         if (cita == null) {
-            System.out.println("Cita no encontrada.");
+            System.out.println("❌ Cita no encontrada.");
             return;
         }
 
-        System.out.print("Ingrese la nueva fecha y hora de la cita (yyyy-MM-dd HH:mm): ");
-        String fechaStr = scanner.nextLine();
-        LocalDateTime nuevaFecha;
+        System.out.print("Ingrese la nueva fecha y hora de inicio de la cita (yyyy-MM-dd HH:mm): ");
+        String fechaInicioStr = scanner.nextLine();
+        LocalDateTime nuevaHoraInicio;
 
         try {
-            nuevaFecha = LocalDateTime.parse(fechaStr.replace(" ", " T "));
+            nuevaHoraInicio = LocalDateTime.parse(fechaInicioStr.replace(" ", "T"));
         } catch (Exception e) {
-            System.out.println("Error: Formato de fecha inválido. Use el formato yyyy-MM-dd HH:mm.");
+            System.out.println("❌ Error: Formato de fecha inválido. Use el formato yyyy-MM-dd HH:mm.");
             return;
         }
 
-        cita.setFecha(nuevaFecha);
-        System.out.println("Cita modificada exitosamente.");
+        System.out.print("Ingrese la nueva fecha y hora de fin de la cita (yyyy-MM-dd HH:mm): ");
+        String fechaFinStr = scanner.nextLine();
+        LocalDateTime nuevaHoraFin;
+
+        try {
+            nuevaHoraFin = LocalDateTime.parse(fechaFinStr.replace(" ", "T"));
+        } catch (Exception e) {
+            System.out.println("❌ Error: Formato de fecha inválido. Use el formato yyyy-MM-dd HH:mm.");
+            return;
+        }
+
+        // Verificar disponibilidad del doctor
+        if (!cita.getDoctor().estaDisponible(nuevaHoraInicio, nuevaHoraFin)) {
+            System.out.println("❌ El doctor no está disponible en ese horario.");
+            return;
+        }
+
+        cita.setHoraInicio(nuevaHoraInicio);
+        cita.setHoraFin(nuevaHoraFin);
+        System.out.println("✅ Cita modificada exitosamente.");
     }
 
     private static Cita buscarCitaPorId(String idCita) {
@@ -397,7 +475,7 @@ public class ClinicaDental {
                 case 3:
                     return;
                 default:
-                    System.out.println("Opción no válida. Intente de nuevo.");
+                    System.out.println("❌ Opción no válida. Intente de nuevo.");
             }
         }
     }
@@ -408,22 +486,33 @@ public class ClinicaDental {
         Paciente paciente = buscarPacientePorDUI(DUI);
 
         if (paciente == null) {
-            System.out.println("Paciente no encontrado.");
+            System.out.println("❌ Paciente no encontrado.");
             return;
         }
-        System.out.print("Ingrese el correo del doctor: ");
-        String correo = scanner.nextLine();
-        Doctor doctor = buscarDoctorPorCorreo(correo);
+
+        System.out.print("Ingrese el ID del doctor: ");
+        int idDoctor = Integer.parseInt(scanner.nextLine());
+        Doctor doctor = buscarDoctorPorId(idDoctor);
 
         if (doctor == null) {
-            System.out.println("Doctor no encontrado.");
+            System.out.println("❌ Doctor no encontrado.");
             return;
         }
+
         System.out.print("Ingrese la descripción del tratamiento: ");
         String descripcion = scanner.nextLine();
+
         System.out.print("Ingrese el costo del tratamiento: ");
-        double costo = scanner.nextDouble();
-        scanner.nextLine(); // Consumir el salto de línea
+        double costo;
+
+        try {
+            costo = scanner.nextDouble();
+            scanner.nextLine(); // Consumir el salto de línea
+        } catch (Exception e) {
+            System.out.println("❌ Error: Ingrese un número válido para el costo.");
+            scanner.nextLine(); // Limpiar el buffer del scanner
+            return;
+        }
 
         // Generar un ID secuencial para el tratamiento
         String idTratamiento = "T" + (tratamientos.size() + 1);
@@ -435,16 +524,16 @@ public class ClinicaDental {
         // Agregar el tratamiento al historial del paciente
         paciente.agregarTratamiento(tratamiento);
 
-        // Mostrar el ID del tratamiento registrado
-        System.out.println("Tratamiento registrado exitosamente con ID: " + idTratamiento);
+        System.out.println("✅ Tratamiento registrado exitosamente con ID: " + idTratamiento);
     }
+
     private static void consultarTratamientosPaciente() {
         System.out.print("Ingrese el DUI del paciente: ");
         String DUI = scanner.nextLine();
         Paciente paciente = buscarPacientePorDUI(DUI);
 
         if (paciente == null) {
-            System.out.println("Paciente no encontrado.");
+            System.out.println("❌ Paciente no encontrado.");
             return;
         }
 
@@ -489,7 +578,7 @@ public class ClinicaDental {
                 case 3:
                     return;
                 default:
-                    System.out.println("Opción no válida. Intente de nuevo.");
+                    System.out.println("❌ Opción no válida. Intente de nuevo.");
             }
         }
     }
@@ -500,27 +589,38 @@ public class ClinicaDental {
         Paciente paciente = buscarPacientePorDUI(DUI);
 
         if (paciente == null) {
-            System.out.println("Paciente no encontrado.");
+            System.out.println("❌ Paciente no encontrado.");
             return;
         }
 
-        System.out.print("Ingrese el correo del doctor: ");
-        String correo = scanner.nextLine();
-        Doctor doctor = buscarDoctorPorCorreo(correo);
+        System.out.print("Ingrese el ID del doctor: ");
+        int idDoctor = Integer.parseInt(scanner.nextLine());
+        Doctor doctor = buscarDoctorPorId(idDoctor);
 
         if (doctor == null) {
-            System.out.println("Doctor no encontrado.");
+            System.out.println("❌ Doctor no encontrado.");
             return;
         }
 
-        System.out.print("Ingrese la fecha y hora de la cita (yyyy-MM-dd HH:mm): ");
-        String fechaStr = scanner.nextLine();
-        LocalDateTime fecha;
+        System.out.print("Ingrese la fecha y hora de inicio de la cita (yyyy-MM-dd HH:mm): ");
+        String fechaInicioStr = scanner.nextLine();
+        LocalDateTime horaInicio;
 
         try {
-            fecha = LocalDateTime.parse(fechaStr.replace(" ", "T"));
+            horaInicio = LocalDateTime.parse(fechaInicioStr.replace(" ", "T"));
         } catch (Exception e) {
-            System.out.println("Error: Formato de fecha inválido. Use el formato yyyy-MM-dd HH:mm.");
+            System.out.println("❌ Error: Formato de fecha inválido. Use el formato yyyy-MM-dd HH:mm.");
+            return;
+        }
+
+        System.out.print("Ingrese la fecha y hora de fin de la cita (yyyy-MM-dd HH:mm): ");
+        String fechaFinStr = scanner.nextLine();
+        LocalDateTime horaFin;
+
+        try {
+            horaFin = LocalDateTime.parse(fechaFinStr.replace(" ", "T"));
+        } catch (Exception e) {
+            System.out.println("❌ Error: Formato de fecha inválido. Use el formato yyyy-MM-dd HH:mm.");
             return;
         }
 
@@ -531,7 +631,7 @@ public class ClinicaDental {
             costoCita = scanner.nextDouble();
             scanner.nextLine(); // Consumir el salto de línea
         } catch (Exception e) {
-            System.out.println("Error: Ingrese un número válido para el costo.");
+            System.out.println("❌ Error: Ingrese un número válido para el costo.");
             scanner.nextLine(); // Limpiar el buffer del scanner
             return;
         }
@@ -540,7 +640,7 @@ public class ClinicaDental {
         String idCita = "C" + (citas.size() + 1);
 
         // Crear la cita con el ID generado
-        Cita cita = new Cita(idCita, paciente, doctor, fecha, costoCita);
+        Cita cita = new Cita(idCita, paciente, doctor, horaInicio, horaFin, costoCita);
         citas.add(cita);
 
         System.out.print("Ingrese el ID del tratamiento: ");
@@ -548,7 +648,7 @@ public class ClinicaDental {
         Tratamiento tratamiento = buscarTratamientoPorId(idTratamiento);
 
         if (tratamiento == null) {
-            System.out.println("Tratamiento no encontrado.");
+            System.out.println("❌ Tratamiento no encontrado.");
             return;
         }
 
@@ -568,12 +668,12 @@ public class ClinicaDental {
         Factura factura = buscarFacturaPorId(idFactura);
 
         if (factura == null) {
-            System.out.println("Factura no encontrada.");
+            System.out.println("❌ Factura no encontrada.");
             return;
         }
 
         factura.setEstadoPago("Pagada");
-        System.out.println("Pago registrado exitosamente para la factura " + idFactura);
+        System.out.println("✅ Pago registrado exitosamente para la factura " + idFactura);
     }
 
     private static Factura buscarFacturaPorId(String idFactura) {

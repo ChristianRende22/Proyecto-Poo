@@ -1,26 +1,32 @@
 package modelo;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Doctor {
+    private int id;
     private String nombre;
     private String apellido;
     private String especialidad;
     private int telefono;
     private String correo;
-    private List<Horario> horarios;
+    private List<Cita> citas;
 
-    public Doctor(String nombre, String apellido, String especialidad, int telefono, String correo) {
+    public Doctor(int id, String nombre, String apellido, String especialidad, int telefono, String correo) {
+        this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.especialidad = especialidad;
         this.telefono = telefono;
         this.correo = correo;
-        this.horarios = new ArrayList<>();
+        this.citas = new ArrayList<>();
     }
 
     // Getters y Setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
 
@@ -36,34 +42,42 @@ public class Doctor {
     public String getCorreo() { return correo; }
     public void setCorreo(String correo) { this.correo = correo; }
 
-    public List<Horario> getHorarios() { return horarios; }
-    public void setHorarios(List<Horario> horarios) { this.horarios = horarios; }
+    public List<Cita> getCitas() { return citas; }
+    public void setCitas(List<Cita> citas) { this.citas = citas; }
 
-    // Métodos adicionales
-    public void consultarCitas(List<Cita> citas) {
-        System.out.println("\n--- Citas del Doctor " + nombre + " " + apellido + " ---");
-        boolean tieneCitas = false;
-
+    // Método para verificar disponibilidad
+    public boolean estaDisponible(LocalDateTime horaInicio, LocalDateTime horaFin) {
         for (Cita cita : citas) {
-            if (cita.getDoctor().equals(this)) {
-                System.out.println("\nID de la cita: " + cita.getIdCita());
-                System.out.println("Paciente: " + cita.getPaciente().getNombre() + " " + cita.getPaciente().getApellido());
-                System.out.println("Fecha y hora: " + cita.getFecha());
-                System.out.println("Costo: $" + cita.getCostoCita());
-                System.out.println("Estado: " + cita.getEstado());
-                tieneCitas = true;
+            if (cita.getHoraInicio().isBefore(horaFin) && cita.getHoraFin().isAfter(horaInicio)) {
+                return false; // El doctor tiene una cita en ese horario
             }
         }
+        return true; // El doctor está disponible
+    }
 
-        if (!tieneCitas) {
+    // Método para consultar las citas del doctor
+    public void consultarCitas() {
+        System.out.println("\n--- Citas del Doctor " + nombre + " " + apellido + " ---");
+        if (citas.isEmpty()) {
             System.out.println("El doctor no tiene citas agendadas.");
+        } else {
+            for (Cita cita : citas) {
+                System.out.println("\nID de la cita: " + cita.getIdCita());
+                System.out.println("Paciente: " + cita.getPaciente().getNombre() + " " + cita.getPaciente().getApellido());
+                System.out.println("Hora de inicio: " + cita.getHoraInicio());
+                System.out.println("Hora de fin: " + cita.getHoraFin());
+                System.out.println("Costo: $" + cita.getCostoCita());
+                System.out.println("Estado: " + cita.getEstado());
+            }
         }
     }
 
+    // Método toString
     @Override
     public String toString() {
         return "Doctor{" +
-                "nombre='" + nombre + '\'' +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
                 ", apellido='" + apellido + '\'' +
                 ", especialidad='" + especialidad + '\'' +
                 ", telefono=" + telefono +
