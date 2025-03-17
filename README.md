@@ -1,6 +1,6 @@
-# 🦷 Sistema de Gestión de Clínica Dental 🏥
+# 🦷 Sistema de Gestión de Clínica Denta 🏥
 
-Bienvenido al **Sistema de Gestión de Clínica Denta**, una aplicación desarrollada en Java que permite administrar de manera eficiente los pacientes, doctores, citas, tratamientos y facturas de una clínica dental. Este sistema está diseñado para facilitar la gestión diaria de una clínica, optimizando el tiempo y mejorando la experiencia tanto para los pacientes como para el personal médico.
+Bienvenido al **Sistema de Gestión de Clínica Dental**, una aplicación desarrollada en Java que permite administrar de manera eficiente los pacientes, doctores, citas, tratamientos y facturas de una clínica dental. Este sistema está diseñado para facilitar la gestión diaria de una clínica, optimizando el tiempo y mejorando la experiencia tanto para los pacientes como para el personal médico.
 
 ---
 
