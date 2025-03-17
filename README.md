@@ -67,22 +67,22 @@ Para ejecutar este proyecto, necesitas:
 El sistema ofrece un menú interactivo con las siguientes opciones:
 
 - Gestión de Pacientes:
-- Registrar nuevo paciente.
-- Actualizar información del paciente.
-- Consultar historial médico.
-- Eliminar paciente.
+  - Registrar nuevo paciente.
+  - Actualizar información del paciente.
+  - Consultar historial médico.
+  - Eliminar paciente.
 - Gestión de Doctores:
-- Registrar nuevo doctor.
-- Consultar citas de un doctor.
+  - Registrar nuevo doctor.
+  - Consultar citas de un doctor.
 - Gestión de Citas:
-- Agendar cita.
-- Cancelar cita.
-- Modificar cita.
+  - Agendar cita.
+  - Cancelar cita.
+  - Modificar cita.
 - Gestión de Tratamientos:
-- Registrar tratamiento.
-- Consultar tratamientos de un paciente.
+  - Registrar tratamiento.
+  - Consultar tratamientos de un paciente.
 - Gestión de Facturas:
-- Generar factura.
-- Registrar pago de factura.
-- Salir: Cierra el sistema.
+  - Generar factura.
+  - Registrar pago de factura.
+  - Salir: Cierra el sistema.
 
