@@ -115,9 +115,9 @@ Si desea contribuir a este proyecto, por favor:
 5. Abra un Pull Request
 
 
-## 👥 Creadores 
-- Christian Renderos 
-- Melisa Rivas 
-- Alisson Quijano 
-- Alejandra Arriola
+## 👥 Autores
+[Christian Renderos]
+[Melisa Rivas]
+[Alisson Quijano]
+[Alejandra Arriola]
 
