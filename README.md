@@ -102,7 +102,7 @@ Opción 3 > Opción 1
 Ingresar DUI del paciente
 Ingresar ID del doctor
 Ingresar fecha/hora y costo
-```
+
 
 ## 💡 Contribución
 
