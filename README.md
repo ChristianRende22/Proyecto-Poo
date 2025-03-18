@@ -85,6 +85,10 @@ El proyecto está organizado en varios módulos representados por clases Java:
 
 ## 📊 Ejemplos de Uso
 
+### Registrar un nuevo Doctor:
+Opción 2 > Opción 1
+Ingresar datos del doctor (nombre, apellido, especialidad, teléfono, correo)
+```
 ### Registrar un nuevo paciente:
 ```
 Opción 1 > Opción 1
@@ -95,7 +99,7 @@ Ingresar datos del paciente (nombre, apellido, edad, DUI, teléfono, correo)
 ```
 Opción 3 > Opción 1
 Ingresar DUI del paciente
-Ingresar correo del doctor
+Ingresar ID del doctor
 Ingresar fecha/hora y costo
 ```
 
@@ -110,6 +114,9 @@ Si desea contribuir a este proyecto, por favor:
 5. Abra un Pull Request
 
 
-## 👥 Contacto
+## 👥 Creadores 
+- Christian Renderos 
+- Melisa Rivas 
+- Alisson Quijano 
+- Alejandra Arriola
 
-Para preguntas o soporte, contacte a (codirrl@gmail.com)
