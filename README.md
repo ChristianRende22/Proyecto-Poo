@@ -84,8 +84,9 @@ El proyecto está organizado en varios módulos representados por clases Java:
 5. Generar facturas y registrar pagos
 
 ## 📊 Ejemplos de Uso
-
+```
 ### Registrar un nuevo Doctor:
+```
 Opción 2 > Opción 1
 Ingresar datos del doctor (nombre, apellido, especialidad, teléfono, correo)
 ```
