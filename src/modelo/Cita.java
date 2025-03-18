@@ -2,15 +2,28 @@ package modelo;
 
 import java.time.LocalDateTime;
 
+/**
+ * Clase que representa una cita en la clínica dental.
+ * Contiene información sobre el paciente, el doctor, el horario y el estado de la cita.
+ */
 public class Cita {
-    private String idCita;
-    private Paciente paciente;
-    private Doctor doctor;
-    private LocalDateTime horaInicio;
-    private LocalDateTime horaFin;
-    private String estado;
-    private double costoCita;
+    private String idCita;          // Identificador único de la cita
+    private Paciente paciente;      // Paciente asociado a la cita
+    private Doctor doctor;          // Doctor asociado a la cita
+    private LocalDateTime horaInicio; // Fecha y hora de inicio de la cita
+    private LocalDateTime horaFin;   // Fecha y hora de fin de la cita
+    private String estado;          // Estado de la cita (Pendiente, Cancelada, etc.)
+    private double costoCita;       // Costo de la cita
 
+    /**
+     * Constructor para crear una nueva cita.
+     * @param idCita Identificador único de la cita.
+     * @param paciente Paciente asociado a la cita.
+     * @param doctor Doctor asociado a la cita.
+     * @param horaInicio Fecha y hora de inicio de la cita.
+     * @param horaFin Fecha y hora de fin de la cita.
+     * @param costoCita Costo de la cita.
+     */
     public Cita(String idCita, Paciente paciente, Doctor doctor, LocalDateTime horaInicio, LocalDateTime horaFin, double costoCita) {
         this.idCita = idCita;
         this.paciente = paciente;
@@ -18,7 +31,7 @@ public class Cita {
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
         this.costoCita = costoCita;
-        this.estado = "Pendiente";
+        this.estado = "Pendiente"; // Por defecto, la cita está pendiente
     }
 
     // Getters y Setters
@@ -43,7 +56,10 @@ public class Cita {
     public double getCostoCita() { return costoCita; }
     public void setCostoCita(double costoCita) { this.costoCita = costoCita; }
 
-    // Método toString
+    /**
+     * Método para representar la cita como una cadena de texto.
+     * @return Cadena que representa la cita.
+     */
     @Override
     public String toString() {
         return "Cita{" +

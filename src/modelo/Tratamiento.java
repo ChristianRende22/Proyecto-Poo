@@ -2,15 +2,29 @@ package modelo;
 
 import java.time.LocalDateTime;
 
+/**
+ * Clase que representa un tratamiento en la clínica dental.
+ * Contiene información sobre el paciente, el doctor, la descripción y el costo del tratamiento.
+ */
 public class Tratamiento {
-    private String idTratamiento;
-    private Paciente paciente;
-    private Doctor doctor;
-    private String descripcion;
-    private double costo;
-    private LocalDateTime fechaRealizacion;
-    private String estado;
+    private String idTratamiento;      // Identificador único del tratamiento
+    private Paciente paciente;         // Paciente asociado al tratamiento
+    private Doctor doctor;             // Doctor asociado al tratamiento
+    private String descripcion;        // Descripción del tratamiento
+    private double costo;              // Costo del tratamiento
+    private LocalDateTime fechaRealizacion; // Fecha y hora de realización del tratamiento
+    private String estado;             // Estado del tratamiento (Pendiente, Completado, etc.)
 
+    /**
+     * Constructor para crear un nuevo tratamiento.
+     * @param idTratamiento Identificador único del tratamiento.
+     * @param paciente Paciente asociado al tratamiento.
+     * @param doctor Doctor asociado al tratamiento.
+     * @param descripcion Descripción del tratamiento.
+     * @param costo Costo del tratamiento.
+     * @param fechaRealizacion Fecha y hora de realización del tratamiento.
+     * @param estado Estado del tratamiento.
+     */
     public Tratamiento(String idTratamiento, Paciente paciente, Doctor doctor, String descripcion, double costo, LocalDateTime fechaRealizacion, String estado) {
         this.idTratamiento = idTratamiento;
         this.paciente = paciente;
@@ -43,6 +57,10 @@ public class Tratamiento {
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }
 
+    /**
+     * Método para representar el tratamiento como una cadena de texto.
+     * @return Cadena que representa el tratamiento.
+     */
     @Override
     public String toString() {
         return "Tratamiento{" +

@@ -3,17 +3,30 @@ package modelo;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase que representa a un paciente en la clínica dental.
+ * Contiene información personal del paciente, su historial médico y citas.
+ */
 public class Paciente {
-    private String nombre;
-    private String apellido;
-    private int edad;
-    private String DUI;
-    private int telefono;
-    private String correo;
-    private List<Tratamiento> historialMedico;
-    private List<Cita> citas;
-    private double saldoPendiente;
+    private String nombre;              // Nombre del paciente
+    private String apellido;            // Apellido del paciente
+    private int edad;                  // Edad del paciente
+    private String DUI;                // Documento único de identidad del paciente
+    private int telefono;              // Teléfono del paciente
+    private String correo;             // Correo electrónico del paciente
+    private List<Tratamiento> historialMedico; // Historial médico del paciente
+    private List<Cita> citas;          // Lista de citas del paciente
+    private double saldoPendiente;     // Saldo pendiente del paciente
 
+    /**
+     * Constructor para crear un nuevo paciente.
+     * @param nombre Nombre del paciente.
+     * @param apellido Apellido del paciente.
+     * @param edad Edad del paciente.
+     * @param DUI Documento único de identidad del paciente.
+     * @param telefono Teléfono del paciente.
+     * @param correo Correo electrónico del paciente.
+     */
     public Paciente(String nombre, String apellido, int edad, String DUI, int telefono, String correo) {
         this.nombre = nombre;
         this.apellido = apellido;
@@ -21,9 +34,9 @@ public class Paciente {
         this.DUI = DUI;
         this.telefono = telefono;
         this.correo = correo;
-        this.historialMedico = new ArrayList<>();
-        this.citas = new ArrayList<>();
-        this.saldoPendiente = 0.0;
+        this.historialMedico = new ArrayList<>(); // Inicializa el historial médico vacío
+        this.citas = new ArrayList<>();          // Inicializa la lista de citas vacía
+        this.saldoPendiente = 0.0;              // Inicializa el saldo pendiente en 0
     }
 
     // Getters y Setters
@@ -54,15 +67,25 @@ public class Paciente {
     public double getSaldoPendiente() { return saldoPendiente; }
     public void setSaldoPendiente(double saldoPendiente) { this.saldoPendiente = saldoPendiente; }
 
-    // Métodos adicionales
+    /**
+     * Método para agregar un tratamiento al historial médico del paciente.
+     * @param tratamiento Tratamiento a agregar.
+     */
     public void agregarTratamiento(Tratamiento tratamiento) {
         historialMedico.add(tratamiento);
     }
 
+    /**
+     * Método para agregar una cita al paciente.
+     * @param cita Cita a agregar.
+     */
     public void agregarCita(Cita cita) {
         citas.add(cita);
     }
 
+    /**
+     * Método para consultar el historial médico del paciente.
+     */
     public void consultarHistorial() {
         System.out.println("\n--- Historial Médico de " + nombre + " " + apellido + " ---");
 
@@ -82,27 +105,31 @@ public class Paciente {
             }
         }
 
-        // Mostrar citas
+// Mostrar citas agendadas
         System.out.println("\n📅 **Citas agendadas**");
         if (citas.isEmpty()) {
             System.out.println("   No hay citas registradas.");
         } else {
             for (Cita cita : citas) {
-                System.out.println("   - ID: " + cita.getIdCita());
-                System.out.println("     Fecha: " + cita.getFecha());
-                System.out.println("     Costo: $" + cita.getCostoCita());
-                System.out.println("     Estado: " + cita.getEstado());
-                System.out.println("     Doctor: " + cita.getDoctor().getNombre() + " " + cita.getDoctor().getApellido());
-                System.out.println("     ------------------------------");
+                System.out.println("   - ID: " + cita.getIdCita());  // Mostrar el ID de la cita
+                System.out.println("     Fecha y hora de inicio: " + cita.getHoraInicio());  // Mostrar la fecha y hora de inicio
+                System.out.println("     Fecha y hora de fin: " + cita.getHoraFin());  // Mostrar la fecha y hora de fin
+                System.out.println("     Costo: $" + cita.getCostoCita());  // Mostrar el costo de la cita
+                System.out.println("     Estado: " + cita.getEstado());  // Mostrar el estado de la cita
+                System.out.println("     Doctor: " + cita.getDoctor().getNombre() + " " + cita.getDoctor().getApellido());  // Mostrar el nombre del doctor
+                System.out.println("     ------------------------------");  // Separador visual
             }
         }
-
         // Mostrar resumen
         System.out.println("\n📊 **Resumen**");
         System.out.println("   Total de tratamientos: " + historialMedico.size());
         System.out.println("   Total de citas: " + citas.size());
     }
 
+    /**
+     * Método para representar al paciente como una cadena de texto.
+     * @return Cadena que representa al paciente.
+     */
     @Override
     public String toString() {
         return "Paciente{" +
