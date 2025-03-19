@@ -72,7 +72,7 @@ public class ClinicaDental {
         pacientes.add(paciente1);
 
         // Crear doctores hardcoded
-        Doctor doctor1 = new Doctor(1, "Carlos", "García", "Odontología", 87654321, "carlos.garcia@clinica.com");
+        Doctor doctor1 = new Doctor(1001, "Carlos", "García", "Odontología", 87654321, "carlos.garcia@clinica.com");
         doctores.add(doctor1);
 
         // Crear citas hardcoded
@@ -89,7 +89,6 @@ public class ClinicaDental {
         Factura factura1 = new Factura("F001", paciente1, List.of(cita1), List.of(tratamiento1), LocalDateTime.now(), 250.0, "Pendiente");
         facturas.add(factura1);
 
-        System.out.println("✅ Datos hardcoded agregados correctamente.");
     }
 
     // Métodos para la gestión de pacientes
@@ -100,7 +99,8 @@ public class ClinicaDental {
             System.out.println("2. Actualizar información del paciente");
             System.out.println("3. Consultar historial médico");
             System.out.println("4. Eliminar paciente");
-            System.out.println("5. Volver al menú principal");
+            System.out.println("5. Mostrar todos los pacientes");
+            System.out.println("6. Volver al menú principal");
             System.out.print("Seleccione una opción: ");
 
             int opcion = scanner.nextInt();
@@ -120,6 +120,9 @@ public class ClinicaDental {
                     eliminarPaciente();
                     break;
                 case 5:
+                    mostrarPacientes(); // Nueva opción para mostrar pacientes
+                    break;
+                case 6:
                     return;
                 default:
                     System.out.println("❌ Opción no válida. Intente de nuevo.");
@@ -128,27 +131,67 @@ public class ClinicaDental {
     }
 
     private static void registrarPaciente() {
-        System.out.print("Ingrese el nombre del paciente: ");
-        String nombre = scanner.nextLine();
-        System.out.print("Ingrese el apellido del paciente: ");
-        String apellido = scanner.nextLine();
-        System.out.print("Ingrese la edad del paciente: ");
-        int edad = scanner.nextInt();
-        scanner.nextLine(); // Consumir el salto de línea
-        System.out.print("Ingrese el DUI del paciente: ");
-        String DUI = scanner.nextLine();
-        System.out.print("Ingrese el teléfono del paciente: ");
-        int telefono = Integer.parseInt(scanner.nextLine());
-        System.out.print("Ingrese el correo del paciente: ");
-        String correo = scanner.nextLine();
-        if(!correo.contains("@")){
-            System.out.println("El correo debe llevar un @");
-        } else {
+        try {
+            System.out.print("Ingrese el nombre del paciente: ");
+            String nombre = scanner.nextLine();
+            if (nombre.isEmpty()) {
+                throw new IllegalArgumentException("❌ El nombre no puede estar vacío.");
+            }
+
+            System.out.print("Ingrese el apellido del paciente: ");
+            String apellido = scanner.nextLine();
+            if (apellido.isEmpty()) {
+                throw new IllegalArgumentException("❌ El apellido no puede estar vacío.");
+            }
+
+            System.out.print("Ingrese la edad del paciente: ");
+            int edad;
+            try {
+                edad = Integer.parseInt(scanner.nextLine());
+                if (edad <= 0) {
+                    throw new IllegalArgumentException("❌ La edad debe ser un número positivo.");
+                }
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("❌ La edad debe ser un número válido.");
+            }
+
+            System.out.print("Ingrese el DUI del paciente (formato: 12345678-9): ");
+            String DUI = scanner.nextLine();
+            if (DUI.isEmpty()) {
+                throw new IllegalArgumentException("❌ El DUI no puede estar vacío.");
+            }
+            if (DUI.length() != 10 || !DUI.matches("\\d{8}-\\d{1}")) {
+                throw new IllegalArgumentException("❌ El DUI debe tener 9 caracteres (formato: 12345678-9).");
+            }
+
+            System.out.print("Ingrese el teléfono del paciente (8 dígitos): ");
+            String telefonoStr = scanner.nextLine();
+            if (telefonoStr.isEmpty()) {
+                throw new IllegalArgumentException("❌ El teléfono no puede estar vacío.");
+            }
+            if (telefonoStr.length() != 8 || !telefonoStr.matches("\\d{8}")) {
+                throw new IllegalArgumentException("❌ El teléfono debe tener exactamente 8 dígitos.");
+            }
+            int telefono = Integer.parseInt(telefonoStr);
+
+            System.out.print("Ingrese el correo del paciente: ");
+            String correo = scanner.nextLine();
+            if (correo.isEmpty()) {
+                throw new IllegalArgumentException("❌ El correo no puede estar vacío.");
+            }
+            if (!correo.contains("@")) {
+                throw new IllegalArgumentException("❌ El correo debe contener un '@'.");
+            }
+
+            // Si todas las validaciones pasan, se registra el paciente
             Paciente paciente = new Paciente(nombre, apellido, edad, DUI, telefono, correo);
             pacientes.add(paciente);
             System.out.println("✅ Paciente registrado exitosamente.");
-            System.out.println(pacientes);
 
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage()); // Mostrar el mensaje de error
+        } catch (Exception e) {
+            System.out.println("❌ Ocurrió un error inesperado: " + e.getMessage());
         }
     }
 
@@ -208,6 +251,31 @@ public class ClinicaDental {
         pacientes.remove(paciente);
         System.out.println("✅ Paciente eliminado exitosamente.");
     }
+    private static void mostrarPacientes() {
+        if (pacientes.isEmpty()) {
+            System.out.println("❌ No hay pacientes registrados.");
+            return;
+        }
+
+        System.out.println("\n--- Lista de Pacientes Registrados ---");
+        System.out.println("+---------------------+---------------------+---------------------+---------------------+---------------------+---------------------+");
+        System.out.println("| Nombre              | Apellido            | DUI                 | Edad                | Teléfono            | Correo              |");
+        System.out.println("+---------------------+---------------------+---------------------+---------------------+---------------------+---------------------+");
+
+        for (Paciente paciente : pacientes) {
+            System.out.printf(
+                    "| %-20s| %-20s| %-20s| %-20d| %-20d| %-20s|\n",
+                    paciente.getNombre(),
+                    paciente.getApellido(),
+                    paciente.getDUI(),
+                    paciente.getEdad(),
+                    paciente.getTelefono(),
+                    paciente.getCorreo()
+            );
+        }
+
+        System.out.println("+---------------------+---------------------+---------------------+---------------------+---------------------+---------------------+");
+    }
 
     private static Paciente buscarPacientePorDUI(String DUI) {
         for (Paciente paciente : pacientes) {
@@ -224,7 +292,8 @@ public class ClinicaDental {
             System.out.println("\n--- Gestión de Doctores ---");
             System.out.println("1. Registrar nuevo doctor");
             System.out.println("2. Consultar citas de un doctor");
-            System.out.println("3. Volver al menú principal");
+            System.out.println("3. Mostrar todos los doctores");
+            System.out.println("4. Volver al menú principal");
             System.out.print("Seleccione una opción: ");
 
             int opcion = scanner.nextInt();
@@ -238,6 +307,9 @@ public class ClinicaDental {
                     consultarCitasDoctor();
                     break;
                 case 3:
+                    mostrarDoctores(); // Nueva opción para mostrar doctores
+                    break;
+                case 4:
                     return;
                 default:
                     System.out.println("❌ Opción no válida. Intente de nuevo.");
@@ -246,21 +318,57 @@ public class ClinicaDental {
     }
 
     private static void registrarDoctor() {
-        System.out.print("Ingrese el nombre del doctor: ");
-        String nombre = scanner.nextLine();
-        System.out.print("Ingrese el apellido del doctor: ");
-        String apellido = scanner.nextLine();
-        System.out.print("Ingrese la especialidad del doctor: ");
-        String especialidad = scanner.nextLine();
-        System.out.print("Ingrese el teléfono del doctor: ");
-        int telefono = Integer.parseInt(scanner.nextLine());
-        System.out.print("Ingrese el correo del doctor: ");
-        String correo = scanner.nextLine();
+        try {
+            System.out.print("Ingrese el nombre del doctor: ");
+            String nombre = scanner.nextLine();
+            if (nombre.isEmpty()) {
+                throw new IllegalArgumentException("❌ El nombre no puede estar vacío.");
+            }
 
-        int idDoctor = generarIdUnico();
-        Doctor doctor = new Doctor(idDoctor, nombre, apellido, especialidad, telefono, correo);
-        doctores.add(doctor);
-        System.out.println("✅ Doctor registrado exitosamente con ID: " + idDoctor);
+            System.out.print("Ingrese el apellido del doctor: ");
+            String apellido = scanner.nextLine();
+            if (apellido.isEmpty()) {
+                throw new IllegalArgumentException("❌ El apellido no puede estar vacío.");
+            }
+
+            System.out.print("Ingrese la especialidad del doctor: ");
+            String especialidad = scanner.nextLine();
+            if (especialidad.isEmpty()) {
+                throw new IllegalArgumentException("❌ La especialidad no puede estar vacía.");
+            }
+
+            System.out.print("Ingrese el teléfono del doctor (8 dígitos): ");
+            String telefonoStr = scanner.nextLine();
+            if (telefonoStr.isEmpty()) {
+                throw new IllegalArgumentException("❌ El teléfono no puede estar vacío.");
+            }
+            if (telefonoStr.length() != 8 || !telefonoStr.matches("\\d{8}")) {
+                throw new IllegalArgumentException("❌ El teléfono debe tener exactamente 8 dígitos.");
+            }
+            int telefono = Integer.parseInt(telefonoStr);
+
+            System.out.print("Ingrese el correo del doctor: ");
+            String correo = scanner.nextLine();
+            if (correo.isEmpty()) {
+                throw new IllegalArgumentException("❌ El correo no puede estar vacío.");
+            }
+            if (!correo.contains("@")) {
+                throw new IllegalArgumentException("❌ El correo debe contener un '@'.");
+            }
+
+            // Generar un ID único de 4 dígitos
+            int idDoctor = generarIdUnico();
+
+            // Crear el doctor con el ID generado
+            Doctor doctor = new Doctor(idDoctor, nombre, apellido, especialidad, telefono, correo);
+            doctores.add(doctor);
+            System.out.println("✅ Doctor registrado exitosamente con ID: " + idDoctor);
+
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage()); // Mostrar el mensaje de error
+        } catch (Exception e) {
+            System.out.println("❌ Ocurrió un error inesperado: " + e.getMessage());
+        }
     }
 
     private static void consultarCitasDoctor() {
@@ -275,7 +383,34 @@ public class ClinicaDental {
 
         doctor.consultarCitas();
     }
+    private static void mostrarDoctores() {
+        if (doctores.isEmpty()) {
+            System.out.println("❌ No hay doctores registrados.");
+            return;
+        }
 
+        // Ordenar la lista de doctores por ID
+        doctores.sort((d1, d2) -> Integer.compare(d1.getId(), d2.getId()));
+
+        System.out.println("\n--- Lista de Doctores Registrados ---");
+        System.out.println("+---------------------+---------------------+---------------------+---------------------+---------------------+---------------------+");
+        System.out.println("| ID                  | Nombre              | Apellido            | Especialidad        | Teléfono            | Correo              |");
+        System.out.println("+---------------------+---------------------+---------------------+---------------------+---------------------+---------------------+");
+
+        for (Doctor doctor : doctores) {
+            System.out.printf(
+                    "| %-20d| %-20s| %-20s| %-20s| %-20d| %-20s|\n",
+                    doctor.getId(),
+                    doctor.getNombre(),
+                    doctor.getApellido(),
+                    doctor.getEspecialidad(),
+                    doctor.getTelefono(),
+                    doctor.getCorreo()
+            );
+        }
+
+        System.out.println("+---------------------+---------------------+---------------------+---------------------+---------------------+---------------------+");
+    }
     private static Doctor buscarDoctorPorId(int id) {
         for (Doctor doctor : doctores) {
             if (doctor.getId() == id) {
@@ -285,9 +420,37 @@ public class ClinicaDental {
         return null;
     }
 
+    // Método para generar un ID único de 4 dígitos
     private static int generarIdUnico() {
-        return doctores.size() + 1;
+        int id = 1000; // Comenzamos desde 1000 para asegurar 4 dígitos
+
+        // Buscar el siguiente ID disponible
+        while (true) {
+            boolean idEnUso = false;
+
+            // Verificar si el ID ya está en uso
+            for (Doctor doctor : doctores) {
+                if (doctor.getId() == id) {
+                    idEnUso = true;
+                    break;
+                }
+            }
+
+            // Si el ID no está en uso, lo retornamos
+            if (!idEnUso) {
+                return id;
+            }
+
+            // Incrementar el ID para probar el siguiente
+            id++;
+
+            // Si llegamos a un ID muy grande (por ejemplo, 9999), reiniciamos
+            if (id > 9999) {
+                id = 1000; // Reiniciamos a 1000
+            }
+        }
     }
+
 
     // Métodos para la gestión de citas
     private static void gestionCitas() {
