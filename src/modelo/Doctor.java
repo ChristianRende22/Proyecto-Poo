@@ -55,15 +55,10 @@ public class Doctor {
     public String getCorreo() { return correo; }
     public void setCorreo(String correo) { this.correo = correo; }
 
-    public List<Cita> getCitas() { return citas; }
-    public void setCitas(List<Cita> citas) { this.citas = citas; }
+//    public List<Cita> getCitas() { return citas; }
+//    public void setCitas(List<Cita> citas) { this.citas = citas; }
 
-    /**
-     * Método para verificar si el doctor está disponible en un horario específico.
-     * @param horaInicio Fecha y hora de inicio de la cita.
-     * @param horaFin Fecha y hora de fin de la cita.
-     * @return true si el doctor está disponible, false en caso contrario.
-     */
+
     public boolean estaDisponible(LocalDateTime horaInicio, LocalDateTime horaFin) {
         for (Cita cita : citas) {
             if (cita.getHoraInicio().isBefore(horaFin) && cita.getHoraFin().isAfter(horaInicio)) {
@@ -73,23 +68,36 @@ public class Doctor {
         return true; // El doctor está disponible
     }
 
-    /**
-     * Método para consultar las citas del doctor.
-     */
+    public void agregarCita(Cita cita) {
+        citas.add(cita);
+    }
+
+    public List<Cita> getCitas() {
+        return citas;
+    }
     public void consultarCitas() {
-        System.out.println("\n--- Citas del Doctor " + nombre + " " + apellido + " ---");
         if (citas.isEmpty()) {
-            System.out.println("El doctor no tiene citas agendadas.");
-        } else {
-            for (Cita cita : citas) {
-                System.out.println("\nID de la cita: " + cita.getIdCita());
-                System.out.println("Paciente: " + cita.getPaciente().getNombre() + " " + cita.getPaciente().getApellido());
-                System.out.println("Hora de inicio: " + cita.getHoraInicio());
-                System.out.println("Hora de fin: " + cita.getHoraFin());
-                System.out.println("Costo: $" + cita.getCostoCita());
-                System.out.println("Estado: " + cita.getEstado());
-            }
+            System.out.println("❌ No hay citas registradas para este doctor.");
+            return;
         }
+
+        System.out.println("\n--- Citas del Doctor " + nombre + " " + apellido + " ---");
+        System.out.println("+---------------------+---------------------+---------------------+---------------------+---------------------+");
+        System.out.println("| ID Cita             | Paciente            | Fecha Inicio        | Fecha Fin           | Estado              |");
+        System.out.println("+---------------------+---------------------+---------------------+---------------------+---------------------+");
+
+        for (Cita cita : citas) {
+            System.out.printf(
+                    "| %-20s| %-20s| %-20s| %-20s| %-20s|\n",
+                    cita.getIdCita(),
+                    cita.getPaciente().getNombre() + " " + cita.getPaciente().getApellido(),
+                    cita.getHoraInicio(),
+                    cita.getHoraFin(),
+                    cita.getEstado()
+            );
+        }
+
+        System.out.println("+---------------------+---------------------+---------------------+---------------------+---------------------+");
     }
 
     /**
