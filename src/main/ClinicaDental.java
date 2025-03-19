@@ -72,7 +72,7 @@ public class ClinicaDental {
         pacientes.add(paciente1);
 
         // Crear doctores hardcoded
-        Doctor doctor1 = new Doctor(1001, "Carlos", "García", "Odontología", 87654321, "carlos.garcia@clinica.com");
+        Doctor doctor1 = new Doctor(1000, "Carlos", "García", "Odontología", 87654321, "carlos.garcia@clinica.com");
         doctores.add(doctor1);
 
         // Crear citas hardcoded
@@ -552,6 +552,9 @@ public class ClinicaDental {
         // Agregar la cita al historial del paciente
         paciente.agregarCita(cita);
 
+        // Agregar la cita al doctor
+        doctor.agregarCita(cita);
+
         System.out.println("✅ Cita agendada exitosamente con ID: " + idCita);
     }
 
@@ -565,8 +568,20 @@ public class ClinicaDental {
             return;
         }
 
+        // Actualizar el estado de la cita a "Cancelada"
         cita.setEstado("Cancelada");
-        System.out.println("✅ Cita cancelada exitosamente.");
+
+        // Actualizar la cita en la lista de citas del paciente
+        Paciente paciente = cita.getPaciente();
+        paciente.getCitas().removeIf(c -> c.getIdCita().equals(idCita)); // Eliminar la cita anterior
+        paciente.agregarCita(cita); // Agregar la cita actualizada
+
+        // Actualizar la cita en la lista de citas del doctor
+        Doctor doctor = cita.getDoctor();
+        doctor.getCitas().removeIf(c -> c.getIdCita().equals(idCita)); // Eliminar la cita anterior
+        doctor.agregarCita(cita); // Agregar la cita actualizada
+
+          System.out.println("✅ Cita cancelada exitosamente.");
     }
 
     private static void modificarCita() {
