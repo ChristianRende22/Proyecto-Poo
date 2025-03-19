@@ -141,10 +141,15 @@ public class ClinicaDental {
         int telefono = Integer.parseInt(scanner.nextLine());
         System.out.print("Ingrese el correo del paciente: ");
         String correo = scanner.nextLine();
+        if(!correo.contains("@")){
+            System.out.println("El correo debe llevar un @");
+        } else {
+            Paciente paciente = new Paciente(nombre, apellido, edad, DUI, telefono, correo);
+            pacientes.add(paciente);
+            System.out.println("✅ Paciente registrado exitosamente.");
+            System.out.println(pacientes);
 
-        Paciente paciente = new Paciente(nombre, apellido, edad, DUI, telefono, correo);
-        pacientes.add(paciente);
-        System.out.println("✅ Paciente registrado exitosamente.");
+        }
     }
 
     private static void actualizarPaciente() {
