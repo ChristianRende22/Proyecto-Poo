@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Clase principal que gestiona la clínica dental.
+ * Contiene el menú principal y métodos para gestionar pacientes, doctores, citas, tratamientos y facturas.
+ */
 public class ClinicaDental {
     private static List<Paciente> pacientes = new ArrayList<>();
     private static List<Doctor> doctores = new ArrayList<>();
@@ -14,11 +18,13 @@ public class ClinicaDental {
     private static List<Factura> facturas = new ArrayList<>();
     private static Scanner scanner = new Scanner(System.in);
 
+    /**
+     * Método principal que inicia la aplicación de la clínica dental.
+     * @param args Argumentos de la línea de comandos (no se utilizan).
+     */
     public static void main(String[] args) {
-        // Agregar datos hardcoded para pruebas
         agregarDatosHardcoded();
 
-        // Menú principal
         while (true) {
             System.out.println("\n--- Sistema de Gestión de Clínica Dental ---");
             System.out.println("1. Gestión de Pacientes");
@@ -32,10 +38,10 @@ public class ClinicaDental {
             int opcion = 0;
             try {
                 opcion = scanner.nextInt();
-                scanner.nextLine(); // Consumir el salto de línea
+                scanner.nextLine();
             } catch (Exception e) {
                 System.out.println("❌ Error: Ingrese un número válido.");
-                scanner.nextLine(); // Limpiar el buffer del scanner
+                scanner.nextLine();
                 continue;
             }
 
@@ -65,33 +71,31 @@ public class ClinicaDental {
         }
     }
 
-    // Método para agregar datos hardcoded
+    /**
+     * Método para agregar datos de prueba (hardcoded) a la clínica dental.
+     */
     private static void agregarDatosHardcoded() {
-        // Crear pacientes hardcoded
         Paciente paciente1 = new Paciente("Juan", "Pérez", 30, "12345678-9", 12345678, "juan.perez@example.com");
         pacientes.add(paciente1);
 
-        // Crear doctores hardcoded
         Doctor doctor1 = new Doctor(1000, "Carlos", "García", "Odontología", 87654321, "carlos.garcia@clinica.com");
         doctores.add(doctor1);
 
-        // Crear citas hardcoded
         LocalDateTime horaInicio = LocalDateTime.of(2025, 10, 25, 10, 0);
         LocalDateTime horaFin = LocalDateTime.of(2025, 10, 25, 11, 0);
         Cita cita1 = new Cita("C001", paciente1, doctor1, horaInicio, horaFin, 100.0);
         citas.add(cita1);
 
-        // Crear tratamientos hardcoded
         Tratamiento tratamiento1 = new Tratamiento("T001", paciente1, doctor1, "Limpieza dental", 150.0, LocalDateTime.now(), "Pendiente");
         tratamientos.add(tratamiento1);
 
-        // Crear facturas hardcoded
         Factura factura1 = new Factura("F001", paciente1, List.of(cita1), List.of(tratamiento1), LocalDateTime.now(), 250.0, "Pendiente");
         facturas.add(factura1);
-
     }
 
-    // Métodos para la gestión de pacientes
+    /**
+     * Método para gestionar las operaciones relacionadas con los pacientes.
+     */
     private static void gestionPacientes() {
         while (true) {
             System.out.println("\n--- Gestión de Pacientes ---");
@@ -104,7 +108,7 @@ public class ClinicaDental {
             System.out.print("Seleccione una opción: ");
 
             int opcion = scanner.nextInt();
-            scanner.nextLine(); // Consumir el salto de línea
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
@@ -120,7 +124,7 @@ public class ClinicaDental {
                     eliminarPaciente();
                     break;
                 case 5:
-                    mostrarPacientes(); // Nueva opción para mostrar pacientes
+                    mostrarPacientes();
                     break;
                 case 6:
                     return;
@@ -130,6 +134,9 @@ public class ClinicaDental {
         }
     }
 
+    /**
+     * Método para registrar un nuevo paciente.
+     */
     private static void registrarPaciente() {
         try {
             System.out.print("Ingrese el nombre del paciente: ");
@@ -183,18 +190,20 @@ public class ClinicaDental {
                 throw new IllegalArgumentException("❌ El correo debe contener un '@'.");
             }
 
-            // Si todas las validaciones pasan, se registra el paciente
             Paciente paciente = new Paciente(nombre, apellido, edad, DUI, telefono, correo);
             pacientes.add(paciente);
             System.out.println("✅ Paciente registrado exitosamente.");
 
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage()); // Mostrar el mensaje de error
+            System.out.println(e.getMessage());
         } catch (Exception e) {
             System.out.println("❌ Ocurrió un error inesperado: " + e.getMessage());
         }
     }
 
+    /**
+     * Método para actualizar la información de un paciente existente.
+     */
     private static void actualizarPaciente() {
         System.out.print("Ingrese el DUI del paciente a actualizar: ");
         String DUI = scanner.nextLine();
@@ -211,7 +220,7 @@ public class ClinicaDental {
         String apellido = scanner.nextLine();
         System.out.print("Ingrese la nueva edad del paciente: ");
         int edad = scanner.nextInt();
-        scanner.nextLine(); // Consumir el salto de línea
+        scanner.nextLine();
         System.out.print("Ingrese el nuevo teléfono del paciente: ");
         int telefono = Integer.parseInt(scanner.nextLine());
         System.out.print("Ingrese el nuevo correo del paciente: ");
@@ -225,6 +234,9 @@ public class ClinicaDental {
         System.out.println("✅ Paciente actualizado exitosamente.");
     }
 
+    /**
+     * Método para consultar el historial médico de un paciente.
+     */
     private static void consultarHistorial() {
         System.out.print("Ingrese el DUI del paciente: ");
         String DUI = scanner.nextLine();
@@ -238,6 +250,9 @@ public class ClinicaDental {
         paciente.consultarHistorial();
     }
 
+    /**
+     * Método para eliminar un paciente de la clínica.
+     */
     private static void eliminarPaciente() {
         System.out.print("Ingrese el DUI del paciente a eliminar: ");
         String DUI = scanner.nextLine();
@@ -251,6 +266,10 @@ public class ClinicaDental {
         pacientes.remove(paciente);
         System.out.println("✅ Paciente eliminado exitosamente.");
     }
+
+    /**
+     * Método para mostrar todos los pacientes registrados en la clínica.
+     */
     private static void mostrarPacientes() {
         if (pacientes.isEmpty()) {
             System.out.println("❌ No hay pacientes registrados.");
@@ -277,6 +296,11 @@ public class ClinicaDental {
         System.out.println("+---------------------+---------------------+---------------------+---------------------+---------------------+---------------------+");
     }
 
+    /**
+     * Método para buscar un paciente por su DUI.
+     * @param DUI Documento único de identidad del paciente.
+     * @return El paciente encontrado o null si no se encuentra.
+     */
     private static Paciente buscarPacientePorDUI(String DUI) {
         for (Paciente paciente : pacientes) {
             if (paciente.getDUI().equals(DUI)) {
@@ -286,7 +310,9 @@ public class ClinicaDental {
         return null;
     }
 
-    // Métodos para la gestión de doctores
+    /**
+     * Método para gestionar las operaciones relacionadas con los doctores.
+     */
     private static void gestionDoctores() {
         while (true) {
             System.out.println("\n--- Gestión de Doctores ---");
@@ -297,7 +323,7 @@ public class ClinicaDental {
             System.out.print("Seleccione una opción: ");
 
             int opcion = scanner.nextInt();
-            scanner.nextLine(); // Consumir el salto de línea
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
@@ -307,7 +333,7 @@ public class ClinicaDental {
                     consultarCitasDoctor();
                     break;
                 case 3:
-                    mostrarDoctores(); // Nueva opción para mostrar doctores
+                    mostrarDoctores();
                     break;
                 case 4:
                     return;
@@ -317,6 +343,9 @@ public class ClinicaDental {
         }
     }
 
+    /**
+     * Método para registrar un nuevo doctor.
+     */
     private static void registrarDoctor() {
         try {
             System.out.print("Ingrese el nombre del doctor: ");
@@ -356,21 +385,21 @@ public class ClinicaDental {
                 throw new IllegalArgumentException("❌ El correo debe contener un '@'.");
             }
 
-            // Generar un ID único de 4 dígitos
             int idDoctor = generarIdUnico();
-
-            // Crear el doctor con el ID generado
             Doctor doctor = new Doctor(idDoctor, nombre, apellido, especialidad, telefono, correo);
             doctores.add(doctor);
             System.out.println("✅ Doctor registrado exitosamente con ID: " + idDoctor);
 
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage()); // Mostrar el mensaje de error
+            System.out.println(e.getMessage());
         } catch (Exception e) {
             System.out.println("❌ Ocurrió un error inesperado: " + e.getMessage());
         }
     }
 
+    /**
+     * Método para consultar las citas de un doctor.
+     */
     private static void consultarCitasDoctor() {
         System.out.print("Ingrese el ID del doctor: ");
         int idDoctor = Integer.parseInt(scanner.nextLine());
@@ -383,13 +412,16 @@ public class ClinicaDental {
 
         doctor.consultarCitas();
     }
+
+    /**
+     * Método para mostrar todos los doctores registrados en la clínica.
+     */
     private static void mostrarDoctores() {
         if (doctores.isEmpty()) {
             System.out.println("❌ No hay doctores registrados.");
             return;
         }
 
-        // Ordenar la lista de doctores por ID
         doctores.sort((d1, d2) -> Integer.compare(d1.getId(), d2.getId()));
 
         System.out.println("\n--- Lista de Doctores Registrados ---");
@@ -411,6 +443,12 @@ public class ClinicaDental {
 
         System.out.println("+---------------------+---------------------+---------------------+---------------------+---------------------+---------------------+");
     }
+
+    /**
+     * Método para buscar un doctor por su ID.
+     * @param id ID del doctor.
+     * @return El doctor encontrado o null si no se encuentra.
+     */
     private static Doctor buscarDoctorPorId(int id) {
         for (Doctor doctor : doctores) {
             if (doctor.getId() == id) {
@@ -420,15 +458,16 @@ public class ClinicaDental {
         return null;
     }
 
-    // Método para generar un ID único de 4 dígitos
+    /**
+     * Método para generar un ID único de 4 dígitos para un doctor.
+     * @return ID único generado.
+     */
     private static int generarIdUnico() {
-        int id = 1000; // Comenzamos desde 1000 para asegurar 4 dígitos
+        int id = 1000;
 
-        // Buscar el siguiente ID disponible
         while (true) {
             boolean idEnUso = false;
 
-            // Verificar si el ID ya está en uso
             for (Doctor doctor : doctores) {
                 if (doctor.getId() == id) {
                     idEnUso = true;
@@ -436,23 +475,21 @@ public class ClinicaDental {
                 }
             }
 
-            // Si el ID no está en uso, lo retornamos
             if (!idEnUso) {
                 return id;
             }
 
-            // Incrementar el ID para probar el siguiente
             id++;
 
-            // Si llegamos a un ID muy grande (por ejemplo, 9999), reiniciamos
             if (id > 9999) {
-                id = 1000; // Reiniciamos a 1000
+                id = 1000;
             }
         }
     }
 
-
-    // Métodos para la gestión de citas
+    /**
+     * Método para gestionar las operaciones relacionadas con las citas.
+     */
     private static void gestionCitas() {
         while (true) {
             System.out.println("\n--- Gestión de Citas ---");
@@ -463,7 +500,7 @@ public class ClinicaDental {
             System.out.print("Seleccione una opción: ");
 
             int opcion = scanner.nextInt();
-            scanner.nextLine(); // Consumir el salto de línea
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
@@ -483,6 +520,9 @@ public class ClinicaDental {
         }
     }
 
+    /**
+     * Método para agendar una nueva cita.
+     */
     private static void agendarCita() {
         System.out.print("Ingrese el DUI del paciente: ");
         String DUI = scanner.nextLine();
@@ -524,7 +564,6 @@ public class ClinicaDental {
             return;
         }
 
-        // Verificar disponibilidad del doctor
         if (!doctor.estaDisponible(horaInicio, horaFin)) {
             System.out.println("❌ El doctor no está disponible en ese horario.");
             return;
@@ -535,29 +574,26 @@ public class ClinicaDental {
 
         try {
             costo = scanner.nextDouble();
-            scanner.nextLine(); // Consumir el salto de línea
+            scanner.nextLine();
         } catch (Exception e) {
             System.out.println("❌ Error: Ingrese un número válido para el costo.");
-            scanner.nextLine(); // Limpiar el buffer del scanner
+            scanner.nextLine();
             return;
         }
 
-        // Generar un ID secuencial para la cita
         String idCita = "C" + (citas.size() + 1);
-
-        // Crear la cita con el ID generado
         Cita cita = new Cita(idCita, paciente, doctor, horaInicio, horaFin, costo);
         citas.add(cita);
 
-        // Agregar la cita al historial del paciente
         paciente.agregarCita(cita);
-
-        // Agregar la cita al doctor
         doctor.agregarCita(cita);
 
         System.out.println("✅ Cita agendada exitosamente con ID: " + idCita);
     }
 
+    /**
+     * Método para cancelar una cita existente.
+     */
     private static void cancelarCita() {
         System.out.print("Ingrese el ID de la cita a cancelar: ");
         String idCita = scanner.nextLine();
@@ -568,22 +604,22 @@ public class ClinicaDental {
             return;
         }
 
-        // Actualizar el estado de la cita a "Cancelada"
         cita.setEstado("Cancelada");
 
-        // Actualizar la cita en la lista de citas del paciente
         Paciente paciente = cita.getPaciente();
-        paciente.getCitas().removeIf(c -> c.getIdCita().equals(idCita)); // Eliminar la cita anterior
-        paciente.agregarCita(cita); // Agregar la cita actualizada
+        paciente.getCitas().removeIf(c -> c.getIdCita().equals(idCita));
+        paciente.agregarCita(cita);
 
-        // Actualizar la cita en la lista de citas del doctor
         Doctor doctor = cita.getDoctor();
-        doctor.getCitas().removeIf(c -> c.getIdCita().equals(idCita)); // Eliminar la cita anterior
-        doctor.agregarCita(cita); // Agregar la cita actualizada
+        doctor.getCitas().removeIf(c -> c.getIdCita().equals(idCita));
+        doctor.agregarCita(cita);
 
-          System.out.println("✅ Cita cancelada exitosamente.");
+        System.out.println("✅ Cita cancelada exitosamente.");
     }
 
+    /**
+     * Método para modificar una cita existente.
+     */
     private static void modificarCita() {
         System.out.print("Ingrese el ID de la cita a modificar: ");
         String idCita = scanner.nextLine();
@@ -616,7 +652,6 @@ public class ClinicaDental {
             return;
         }
 
-        // Verificar disponibilidad del doctor
         if (!cita.getDoctor().estaDisponible(nuevaHoraInicio, nuevaHoraFin)) {
             System.out.println("❌ El doctor no está disponible en ese horario.");
             return;
@@ -627,6 +662,11 @@ public class ClinicaDental {
         System.out.println("✅ Cita modificada exitosamente.");
     }
 
+    /**
+     * Método para buscar una cita por su ID.
+     * @param idCita ID de la cita.
+     * @return La cita encontrada o null si no se encuentra.
+     */
     private static Cita buscarCitaPorId(String idCita) {
         for (Cita cita : citas) {
             if (cita.getIdCita().equals(idCita)) {
@@ -636,7 +676,9 @@ public class ClinicaDental {
         return null;
     }
 
-    // Métodos para la gestión de tratamientos
+    /**
+     * Método para gestionar las operaciones relacionadas con los tratamientos.
+     */
     private static void gestionTratamientos() {
         while (true) {
             System.out.println("\n--- Gestión de Tratamientos ---");
@@ -646,7 +688,7 @@ public class ClinicaDental {
             System.out.print("Seleccione una opción: ");
 
             int opcion = scanner.nextInt();
-            scanner.nextLine(); // Consumir el salto de línea
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
@@ -663,6 +705,9 @@ public class ClinicaDental {
         }
     }
 
+    /**
+     * Método para registrar un nuevo tratamiento.
+     */
     private static void registrarTratamiento() {
         System.out.print("Ingrese el DUI del paciente: ");
         String DUI = scanner.nextLine();
@@ -690,26 +735,25 @@ public class ClinicaDental {
 
         try {
             costo = scanner.nextDouble();
-            scanner.nextLine(); // Consumir el salto de línea
+            scanner.nextLine();
         } catch (Exception e) {
             System.out.println("❌ Error: Ingrese un número válido para el costo.");
-            scanner.nextLine(); // Limpiar el buffer del scanner
+            scanner.nextLine();
             return;
         }
 
-        // Generar un ID secuencial para el tratamiento
         String idTratamiento = "T" + (tratamientos.size() + 1);
-
-        // Crear el tratamiento con el ID generado
         Tratamiento tratamiento = new Tratamiento(idTratamiento, paciente, doctor, descripcion, costo, LocalDateTime.now(), "Pendiente");
         tratamientos.add(tratamiento);
 
-        // Agregar el tratamiento al historial del paciente
         paciente.agregarTratamiento(tratamiento);
 
         System.out.println("✅ Tratamiento registrado exitosamente con ID: " + idTratamiento);
     }
 
+    /**
+     * Método para consultar los tratamientos de un paciente.
+     */
     private static void consultarTratamientosPaciente() {
         System.out.print("Ingrese el DUI del paciente: ");
         String DUI = scanner.nextLine();
@@ -739,7 +783,9 @@ public class ClinicaDental {
         }
     }
 
-    // Métodos para la gestión de facturas
+    /**
+     * Método para gestionar las operaciones relacionadas con las facturas.
+     */
     private static void gestionFacturas() {
         while (true) {
             System.out.println("\n--- Gestión de Facturas ---");
@@ -749,7 +795,7 @@ public class ClinicaDental {
             System.out.print("Seleccione una opción: ");
 
             int opcion = scanner.nextInt();
-            scanner.nextLine(); // Consumir el salto de línea
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
@@ -766,6 +812,9 @@ public class ClinicaDental {
         }
     }
 
+    /**
+     * Método para generar una nueva factura.
+     */
     private static void generarFactura() {
         System.out.print("Ingrese el DUI del paciente: ");
         String DUI = scanner.nextLine();
@@ -812,17 +861,14 @@ public class ClinicaDental {
 
         try {
             costoCita = scanner.nextDouble();
-            scanner.nextLine(); // Consumir el salto de línea
+            scanner.nextLine();
         } catch (Exception e) {
             System.out.println("❌ Error: Ingrese un número válido para el costo.");
-            scanner.nextLine(); // Limpiar el buffer del scanner
+            scanner.nextLine();
             return;
         }
 
-        // Generar un ID secuencial para la cita
         String idCita = "C" + (citas.size() + 1);
-
-        // Crear la cita con el ID generado
         Cita cita = new Cita(idCita, paciente, doctor, horaInicio, horaFin, costoCita);
         citas.add(cita);
 
@@ -835,16 +881,16 @@ public class ClinicaDental {
             return;
         }
 
-        // Generar un ID secuencial para la factura
         String idFactura = "F" + (facturas.size() + 1);
-
-        // Crear la factura con el ID generado
         Factura factura = new Factura(idFactura, paciente, List.of(cita), List.of(tratamiento), LocalDateTime.now(), 0.0, "Pendiente");
         factura.calcularMontoTotal(cita, tratamiento);
         facturas.add(factura);
         factura.generarFactura();
     }
 
+    /**
+     * Método para registrar el pago de una factura.
+     */
     private static void registrarPagoFactura() {
         System.out.print("Ingrese el ID de la factura: ");
         String idFactura = scanner.nextLine();
@@ -859,6 +905,11 @@ public class ClinicaDental {
         System.out.println("✅ Pago registrado exitosamente para la factura " + idFactura);
     }
 
+    /**
+     * Método para buscar una factura por su ID.
+     * @param idFactura ID de la factura.
+     * @return La factura encontrada o null si no se encuentra.
+     */
     private static Factura buscarFacturaPorId(String idFactura) {
         for (Factura factura : facturas) {
             if (factura.getIdFactura().equals(idFactura)) {
@@ -868,6 +919,11 @@ public class ClinicaDental {
         return null;
     }
 
+    /**
+     * Método para buscar un tratamiento por su ID.
+     * @param idTratamiento ID del tratamiento.
+     * @return El tratamiento encontrado o null si no se encuentra.
+     */
     private static Tratamiento buscarTratamientoPorId(String idTratamiento) {
         for (Tratamiento tratamiento : tratamientos) {
             if (tratamiento.getIdTratamiento().equals(idTratamiento)) {
