@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"modelo","l":"Cita"},{"p":"main","l":"ClinicaDental"},{"p":"modelo","l":"Doctor"},{"p":"modelo","l":"Factura"},{"p":"modelo","l":"Horario"},{"p":"modelo","l":"Paciente"},{"p":"modelo","l":"Tratamiento"}];updateSearchResults();
