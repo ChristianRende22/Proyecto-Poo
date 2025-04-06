@@ -9,7 +9,7 @@ public class DoctorTest {
     private Doctor doctor;
     private Paciente paciente;
 
-    @BeforeEach  // Anotación de JUnit 5
+    @BeforeEach  // Anotación de JUnit 5.8.1
     public void setUp() {
         doctor = new Doctor(1000, "Carlos", "García", "Odontología", 87654321, "carlos@clinica.com");
         paciente = new Paciente("Juan", "Pérez", 30, "12345678-9", 12345678, "juan@example.com");
