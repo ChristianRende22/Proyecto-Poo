@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 public class FacturaTest {
-
+    // Anotación de JUnit 5.8.1
     @Test
     public void testCalcularMontoTotal() {
         // 1. Configuración manual
